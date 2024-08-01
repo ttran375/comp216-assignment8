@@ -1,14 +1,18 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
-from amazon_ses import AmazonSES
 import os
+import tkinter as tk
+from tkinter import messagebox, ttk
+
 from dotenv import load_dotenv
+
+from amazon_ses import AmazonSES
 
 # Load environment variables from .env file
 load_dotenv()
 
+
 class LineChartApp(tk.Tk):
 
+    # Class variables for minimum and maximum temperature thresholds and email information
     _min_temp = 18
     _max_temp = 27
     _SENDER = os.getenv("AWS_EMAIL")
@@ -17,15 +21,18 @@ class LineChartApp(tk.Tk):
 
     def __init__(self):
         super().__init__()
+
+        # Canvas dimensions for drawing the chart
         self.canvas_temp_width = 600
         self.canvas_temp_height = 300
-
         self.canvas_width = 800
         self.canvas_height = 300
 
+        # Initialize pointer for temperature indicator
         self.my_pointer = None
         self.x_dist = 20
         self.y_dist = 5
+
         # Set up the main window
         self.title("Line Chart App")
         self.geometry("800x600")
@@ -78,6 +85,7 @@ class LineChartApp(tk.Tk):
         self.draw_temperature()
         self.draw_temp_pointer(10)
 
+        # Initialize the AmazonSES object for sending emails
         self._myAmazonSES = AmazonSES(self._SENDER, self._RECIPIENT)
         self._myAmazonSES.setSubject("Warning: Out of bound input value")
 
@@ -89,8 +97,8 @@ class LineChartApp(tk.Tk):
         self.canvas.delete("all")
 
         # Draw the X and Y axes
-        self.canvas.create_line(50, 280, 550, 280, arrow=tk.LAST)  # X axis
-        self.canvas.create_line(50, 280, 50, 10, arrow=tk.LAST)  # Y axis
+        self.canvas.create_line(50, 280, 550, 280, arrow=tk.LAST)
+        self.canvas.create_line(50, 280, 50, 10, arrow=tk.LAST)
 
         # Labels for the X and Y axes
         self.canvas.create_text(550, 290, text="Time (s)", anchor=tk.W)
@@ -114,17 +122,21 @@ class LineChartApp(tk.Tk):
         try:
             new_value = int(self.value_entry.get())
 
+            # Check if the new value is out of bounds and send an email if necessary
             if new_value < self._min_temp or new_value > self._max_temp:
                 self._myAmazonSES.setBody(new_value, self._min_temp, self._max_temp)
                 self._myAmazonSES.sendemail()
 
-            self.values.append(new_value)  # Update the last value in the list
+            # Add the new value to the list
+            self.values.append(new_value)
 
+            # Calculate the position of the new point on the chart
             new_point = [
                 50 + len(self.values) * self.x_dist,
                 280 - (new_value + 10) * self.y_dist,
             ]
 
+            # Draw the new point on the chart
             self.canvas.create_oval(
                 new_point[0] - 3,
                 new_point[1] - 3,
@@ -136,6 +148,7 @@ class LineChartApp(tk.Tk):
                 new_point[0], new_point[1] - 10, text=str(new_value), fill="black"
             )
 
+            # Draw a line connecting the new point to the previous point
             if len(self.values) > 1:
                 pre_point = [
                     50 + (len(self.values) - 1) * self.x_dist,
@@ -150,6 +163,7 @@ class LineChartApp(tk.Tk):
                     width=2,
                 )
 
+            # Update the temperature pointer
             self.draw_temp_pointer(new_value)
 
         except ValueError:
@@ -157,10 +171,9 @@ class LineChartApp(tk.Tk):
 
     def draw_temperature(self):
         """
-        Draw the line chart on the canvas.
-        This function clears the canvas and redraws the chart with the current values.
+        Draw the temperature indicator on the canvas.
+        This function creates a thermometer-like indicator to show the temperature.
         """
-
         width = 30
         start_point = [700, 10]
         start_point2 = [start_point[0] + width, start_point[1]]
@@ -170,35 +183,42 @@ class LineChartApp(tk.Tk):
 
         self.temp_start_y = cir_bottom_right[1] - (width / 2)
 
+        # Draw the bulb of the thermometer
         self.canvas.create_oval(
             cir_top_left[0],
-            cir_top_left[1],  # top left
+            cir_top_left[1],
             start_point2[0],
-            cir_bottom_right[1],  # bottom right
+            cir_bottom_right[1],
             outline="#f11",
             fill="#1f1",
         )
 
+        # Draw the stem of the thermometer
         self.canvas.create_line(
             cir_top_left[0] - 2, start_point[1], cir_top_left[0] - 2, self.temp_start_y
-        )  # X axis
+        )
 
         self.rect_top_left = [cir_top_left[0] + 5, start_point[1]]
         self.rect_bottom_right = [cir_bottom_right[0] - 5, cir_bottom_right[1] - 20]
         self.canvas.create_rectangle(
             self.rect_top_left[0],
-            self.rect_top_left[1],  # top left
+            self.rect_top_left[1],
             self.rect_bottom_right[0],
-            self.rect_bottom_right[1],  # bottom right
+            self.rect_bottom_right[1],
             outline="",
             fill="#1f1",
         )
 
+        # Draw the temperature values on the thermometer
         for i in range(0, 100, 10):
             y = self.temp_start_y - (i * 3)
             self.canvas.create_text(start_point[0] - 5, y, text=f"{i}", anchor=tk.E)
 
     def draw_temp_pointer(self, i):
+        """
+        Draw the temperature pointer on the thermometer.
+        This function updates the position of the pointer based on the current temperature value.
+        """
         if self.my_pointer is not None:
             self.canvas.delete(self.my_pointer)
 
@@ -208,9 +228,9 @@ class LineChartApp(tk.Tk):
         new_rect_bottom_right = [self.rect_bottom_right[0], new_point + (5 * 3)]
         self.my_pointer = self.canvas.create_rectangle(
             new_rect_top_left[0],
-            new_rect_top_left[1],  # top left
+            new_rect_top_left[1],
             new_rect_bottom_right[0],
-            new_rect_bottom_right[1],  # bottom right
+            new_rect_bottom_right[1],
             outline="",
             fill="#87cefa",
         )
