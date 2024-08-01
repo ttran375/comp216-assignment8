@@ -1,6 +1,8 @@
+
+
 from tkinter import *
 from tkinter.ttk import *
-from tkinter import font
+from tkinter import font, messagebox
 from gmail_smtp import GmailSMTP
 import os
 from dotenv import load_dotenv
@@ -204,33 +206,35 @@ class GaugeView(Tk):
         # self.canvas.bind('<Motion>', self.update_mouse_coordinates)
 
     def updateView(self):
+        try:
+            if self.value.get() < 0 or self.value.get() > 80:
+                gmail_smtp = GmailSMTP(
+                    os.getenv("GMAIL_USER"),
+                    os.getenv("GMAIL_PASSWORD"),
+                    os.getenv("RECIPIENT_EMAIL"),
+                )
+                gmail_smtp.setSubject("Warning: Out of bound input value")
+                gmail_smtp.setBody(userInput=self.value.get(), normalLow=0, normalHigh=80)
+                gmail_smtp.sendemail()
 
-        if self.value.get() < 0 or self.value.get() > 80:
-            gmail_smtp = GmailSMTP(
-                os.getenv("GMAIL_USER"),
-                os.getenv("GMAIL_PASSWORD"),
-                os.getenv("GMAIL_RECIPIENT"),
-            )
-            gmail_smtp.setSubject("Warning: Out of bound input value")
-            gmail_smtp.setBody(userInput=self.value.get(), normalLow=0, normalHigh=80)
-            gmail_smtp.sendemail()
-
-        else:
-            if self.pointer is not None:
-                self.canvas.delete(self.pointer)
-            x_center = 270
-            y_center = 225
-            r_pointer = 170
-            self.pointer = self.canvas.create_arc(
-                x_center - r_pointer,
-                y_center - r_pointer,
-                x_center + r_pointer,
-                y_center + r_pointer,
-                start=240 - 3.75 * self.value.get(),
-                extent=1,
-                outline="black",
-                fill="black",
-            )
+            else:
+                if self.pointer is not None:
+                    self.canvas.delete(self.pointer)
+                x_center = 270
+                y_center = 225
+                r_pointer = 170
+                self.pointer = self.canvas.create_arc(
+                    x_center - r_pointer,
+                    y_center - r_pointer,
+                    x_center + r_pointer,
+                    y_center + r_pointer,
+                    start=240 - 3.75 * self.value.get(),
+                    extent=1,
+                    outline="black",
+                    fill="black",
+                )
+        except TclError:
+            messagebox.showerror("Invalid Input", f"Please enter a valid floating-point number")
 
     def update_mouse_coordinates(self, event):
         x = event.x

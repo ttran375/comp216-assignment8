@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from amazon_ses import AmazonSES
 import os
 from dotenv import load_dotenv
@@ -11,7 +11,7 @@ class LineChartApp(tk.Tk):
 
     _min_temp = 18
     _max_temp = 27
-    _SENDER = os.getenv("SENDER_EMAIL")
+    _SENDER = os.getenv("AWS_EMAIL")
     _RECIPIENT = os.getenv("RECIPIENT_EMAIL")
     _myAmazonSES = None
 
@@ -153,7 +153,7 @@ class LineChartApp(tk.Tk):
             self.draw_temp_pointer(new_value)
 
         except ValueError:
-            print("Please enter a valid integer")
+            messagebox.showerror("Invalid Input", "Please enter a valid integer")
 
     def draw_temperature(self):
         """
