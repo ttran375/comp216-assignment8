@@ -16,7 +16,7 @@ that is too low or high and send an email notification via Gmail. Note:
 Create a temporary Gmail account for the group to utilize. Implement the
 code with the standard SMTP library.
 
-**Exercise – Notification Emails via AWS:**
+## Exercise – Notification Emails via AWS:
 
 To continue the exploration of cloud computing and networks via Amazon
 Web Services (AWS), deploy and configure Amazon Simple Email Service
