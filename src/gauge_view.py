@@ -31,6 +31,9 @@ class GaugeView(Tk):
         Tk.__init__(self)
         self.title("Gauge")
 
+        # Initialize pointer to None
+        self.pointer = None
+
         # Create a canvas for drawing
         Canvas(self, width=500, height=500).pack(padx=20, pady=20)
 
