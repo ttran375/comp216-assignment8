@@ -1,7 +1,12 @@
 import os
 
 import boto3
-from botocore.exceptions import ClientError
+from botocore.exceptions import (
+    ClientError,
+    EndpointConnectionError,
+    NoCredentialsError,
+    PartialCredentialsError,
+)
 from dotenv import load_dotenv
 
 # Load environment variables from a .env file
@@ -89,9 +94,18 @@ class AmazonSES:
                 Source=self._sender,
                 ConfigurationSetName=self._configuration_set,
             )
+        except NoCredentialsError:
+            print("Credentials not available.")
+        except PartialCredentialsError:
+            print("Incomplete credentials provided.")
+        except EndpointConnectionError:
+            print("Could not connect to the endpoint URL.")
         except ClientError as e:
             # Print error message if sending fails
             print(e.response["Error"]["Message"])
+        except Exception as e:
+            # Catch-all for any other exceptions
+            print(f"An error occurred: {e}")
         else:
             # Print message ID if sending is successful
             print("Email sent! Message ID:"),
