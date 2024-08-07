@@ -30,18 +30,18 @@ class AmazonSES:
         self._recipient = recipient
 
         # Create an SES client using boto3 with the specified AWS credentials and region
-        self._sesClient = boto3.client(
+        self._ses_client = boto3.client(
             "ses",
             region_name=self._aws_region,
             aws_access_key_id=self._aws_access_key_id,
             aws_secret_access_key=self._aws_secret_access_key,
         )
 
-    def setSubject(self, subject):
+    def set_subject(self, subject):
         # Set the subject of the email
         self._subject = subject
 
-    def setBody(self, userInput, normalLow, normalHigh):
+    def set_body(self, user_input, normal_low, normal_high):
         # Set the HTML body of the email with dynamic user input and range
         self._mail_body_html = (
             """<html>
@@ -49,11 +49,11 @@ class AmazonSES:
             <body>
               <h1>Warning: Out of bound input value</h1>
               <p>The input value """
-            + str(userInput)
+            + str(user_input)
             + """ is outside the normal display range from """
-            + str(normalLow)
+            + str(normal_low)
             + """ to """
-            + str(normalHigh)
+            + str(normal_high)
             + """ .</p>
             </body>
             </html>"""
@@ -66,10 +66,10 @@ class AmazonSES:
             "AWS SDK for Python (Boto)."
         )
 
-    def sendemail(self):
+    def send_email(self):
         try:
             # Attempt to send the email using the SES client
-            response = self._sesClient.send_email(
+            response = self._ses_client.send_email(
                 Destination={
                     "ToAddresses": [
                         self._recipient,

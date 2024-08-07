@@ -18,11 +18,11 @@ class GmailSMTP:
         self._sender_password = sender_password
         self._recipient_email = recipient_email
 
-    def setSubject(self, subject):
+    def set_subject(self, subject):
         # Set the subject of the email
         self._subject = subject
 
-    def setBody(self, userInput, normalLow, normalHigh):
+    def set_body(self, user_input, normal_low, normal_high):
 
         # Set the HTML body of the email with dynamic user input and range
         self._mail_body_html = (
@@ -30,8 +30,8 @@ class GmailSMTP:
             "<head></head>"
             "<body>"
             "<h1>Warning: Out of bound input value</h1>"
-            "<p>The input value {userInput} is outside the normal display range from "
-            f"{normalLow} to {normalHigh}.</p>"
+            "<p>The input value {user_input} is outside the normal display range from "
+            f"{normal_low} to {normal_high}.</p>"
             "</body>"
             "</html>"
         )
@@ -39,11 +39,11 @@ class GmailSMTP:
         # Set the plain text body of the email
         self._mail_body_text = (
             "Warning: Out of bound input value\n"
-            f"The input value {userInput} is outside the normal display range from "
-            f"{normalLow} to {normalHigh}."
+            f"The input value {user_input} is outside the normal display range from "
+            f"{normal_low} to {normal_high}."
         )
 
-    def sendemail(self):
+    def send_email(self):
         # Create a MIMEMultipart message object
         msg = MIMEMultipart("alternative")
         msg["From"] = self._sender_email

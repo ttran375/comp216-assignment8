@@ -71,7 +71,7 @@ class GaugeView(Tk):
         Label(row1, text="Enter New Value:", width=12).pack(side=LEFT)
         Entry(row1, text="Enter New Value:", textvariable=self.value).pack(side=LEFT)
         Button(
-            row1, text="Enter", command=self.updateView, style="CustomButton.TButton"
+            row1, text="Enter", command=self.update_view, style="CustomButton.TButton"
         ).pack(side=LEFT, padx=5)
 
         # Create the canvas for the gauge
@@ -232,7 +232,7 @@ class GaugeView(Tk):
         # Pack the canvas
         self.canvas.pack(fill=BOTH, expand=1)
 
-    def updateView(self):
+    def update_view(self):
         try:
             # Check if the input value is out of bounds
             if self.value.get() < 0 or self.value.get() > 80:
@@ -242,11 +242,11 @@ class GaugeView(Tk):
                     os.getenv("GMAIL_PASSWORD"),
                     os.getenv("RECIPIENT_EMAIL"),
                 )
-                gmail_smtp.setSubject("Warning: Out of bound input value")
-                gmail_smtp.setBody(
-                    userInput=self.value.get(), normalLow=0, normalHigh=80
+                gmail_smtp.set_subject("Warning: Out of bound input value")
+                gmail_smtp.set_body(
+                    user_input=self.value.get(), normal_low=0, normal_high=80
                 )
-                gmail_smtp.sendemail()
+                gmail_smtp.send_email()
                 messagebox.showinfo(
                     "Email Sent",
                     "Please check the email!",
