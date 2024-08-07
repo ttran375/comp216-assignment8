@@ -23,18 +23,25 @@ class GmailSMTP:
         self._subject = subject
 
     def setBody(self, userInput, normalLow, normalHigh):
+
         # Set the HTML body of the email with dynamic user input and range
-        self._mail_body_html = f"""<html>
-        <head></head>
-        <body>
-          <h1>Warning: Out of bound input value</h1>
-          <p>The input value {userInput} is outside the normal display range from {normalLow} to {normalHigh}.</p>
-        </body>
-        </html>"""
+        self._mail_body_html = (
+            "<html>"
+            "<head></head>"
+            "<body>"
+            "<h1>Warning: Out of bound input value</h1>"
+            "<p>The input value {userInput} is outside the normal display range from "
+            f"{normalLow} to {normalHigh}.</p>"
+            "</body>"
+            "</html>"
+        )
 
         # Set the plain text body of the email
-        self._mail_body_text = f"""Warning: Out of bound input value
-        The input value {userInput} is outside the normal display range from {normalLow} to {normalHigh}."""
+        self._mail_body_text = (
+            "Warning: Out of bound input value\n"
+            f"The input value {userInput} is outside the normal display range from "
+            f"{normalLow} to {normalHigh}."
+        )
 
     def sendemail(self):
         # Create a MIMEMultipart message object
