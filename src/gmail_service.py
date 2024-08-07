@@ -61,24 +61,39 @@ class GmailService:
         try:
             # Establish connection to the SMTP server
             server = smtplib.SMTP(self._smtp_server, self._smtp_port)
-            server.starttls()
+            server.starttls()  # Secure the connection
             server.login(self._sender_email, self._sender_password)
             server.sendmail(self._sender_email, self._recipient_email, msg.as_string())
-            server.quit()
+            server.quit()  # Terminate the SMTP session
             print("Email sent successfully!")
         except smtplib.SMTPAuthenticationError:
-            print("Failed to authenticate with the SMTP server. Check the username and password.")
+            # Handle authentication errors (e.g., incorrect username or password)
+            print(
+                "Failed to authenticate with the SMTP server. Check the username and password."
+            )
         except smtplib.SMTPConnectError:
-            print("Failed to connect to the SMTP server. Check the server address and port.")
+            # Handle connection errors (e.g., server address or port issues)
+            print(
+                "Failed to connect to the SMTP server. Check the server address and port."
+            )
         except smtplib.SMTPRecipientsRefused:
-            print("The server refused the recipient address. Check the recipient email address.")
+            # Handle errors where the recipient address is refused by the server
+            print(
+                "The server refused the recipient address. Check the recipient email address."
+            )
         except smtplib.SMTPSenderRefused:
-            print("The server refused the sender address. Check the sender email address.")
+            # Handle errors where the sender address is refused by the server
+            print(
+                "The server refused the sender address. Check the sender email address."
+            )
         except smtplib.SMTPDataError:
-            print("The server replied with an unexpected error code. Check the email content.")
+            # Handle unexpected errors in the SMTP data exchange
+            print(
+                "The server replied with an unexpected error code. Check the email content."
+            )
         except smtplib.SMTPException as e:
-            # Catch-all for any other SMTP exceptions
+            # Catch-all for any other SMTP-related exceptions
             print(f"Failed to send email: {str(e)}")
-        except Exception as e:
-            # Catch-all for any other exceptions
-            print(f"An unexpected error occurred: {str(e)}")
+        except (TypeError, ValueError) as e:
+            # Handle common errors in data types or values (e.g., during email construction)
+            print(f"An error occurred: {e}")
