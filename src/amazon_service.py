@@ -95,16 +95,19 @@ class AmazonService:
                 ConfigurationSetName=self._configuration_set,
             )
         except NoCredentialsError:
+            # Handle case where AWS credentials are not available
             print("Credentials not available.")
         except PartialCredentialsError:
+            # Handle case where incomplete AWS credentials are provided
             print("Incomplete credentials provided.")
         except EndpointConnectionError:
+            # Handle connection errors with the endpoint URL
             print("Could not connect to the endpoint URL.")
         except ClientError as e:
-            # Print error message if sending fails
+            # Handle general client errors from boto3
             print(e.response["Error"]["Message"])
         except (TypeError, ValueError) as e:
-            # More specific exceptions can be added as needed
+            # Handle type and value errors that might occur during the process
             print(f"An error occurred: {e}")
         else:
             # Print message ID if sending is successful
