@@ -103,10 +103,9 @@ class AmazonService:
         except ClientError as e:
             # Print error message if sending fails
             print(e.response["Error"]["Message"])
-        except Exception as e:
-            # Catch-all for any other exceptions
+        except (TypeError, ValueError) as e:
+            # More specific exceptions can be added as needed
             print(f"An error occurred: {e}")
         else:
             # Print message ID if sending is successful
-            print("Email sent! Message ID:"),
-            print(response["MessageId"])
+            print("Email sent! Message ID:", response["MessageId"])

@@ -66,6 +66,19 @@ class GmailService:
             server.sendmail(self._sender_email, self._recipient_email, msg.as_string())
             server.quit()
             print("Email sent successfully!")
-        except Exception as e:
-            # Print error message if sending fails
+        except smtplib.SMTPAuthenticationError:
+            print("Failed to authenticate with the SMTP server. Check the username and password.")
+        except smtplib.SMTPConnectError:
+            print("Failed to connect to the SMTP server. Check the server address and port.")
+        except smtplib.SMTPRecipientsRefused:
+            print("The server refused the recipient address. Check the recipient email address.")
+        except smtplib.SMTPSenderRefused:
+            print("The server refused the sender address. Check the sender email address.")
+        except smtplib.SMTPDataError:
+            print("The server replied with an unexpected error code. Check the email content.")
+        except smtplib.SMTPException as e:
+            # Catch-all for any other SMTP exceptions
             print(f"Failed to send email: {str(e)}")
+        except Exception as e:
+            # Catch-all for any other exceptions
+            print(f"An unexpected error occurred: {str(e)}")
