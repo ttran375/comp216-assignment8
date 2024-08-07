@@ -3,7 +3,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-class GmailSMTP:
+class GmailService:
     # Class variables for SMTP server configuration
     _smtp_server = "smtp.gmail.com"
     _smtp_port = 587

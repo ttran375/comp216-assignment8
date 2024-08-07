@@ -18,7 +18,8 @@ from tkinter import (
 from tkinter.ttk import Button, Style
 
 from dotenv import load_dotenv
-from gmail_smtp import GmailSMTP
+
+from gmail_service import GmailService
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -237,7 +238,7 @@ class GaugeView(Tk):
             # Check if the input value is out of bounds
             if self.value.get() < 0 or self.value.get() > 80:
                 # Send an email if the value is out of bounds
-                gmail_smtp = GmailSMTP(
+                gmail_smtp = GmailService(
                     os.getenv("GMAIL_USER"),
                     os.getenv("GMAIL_PASSWORD"),
                     os.getenv("RECIPIENT_EMAIL"),

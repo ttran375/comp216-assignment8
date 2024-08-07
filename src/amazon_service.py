@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class AmazonSES:
+class AmazonService:
     # Initialize class variables with environment variables
     _aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
     _aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
