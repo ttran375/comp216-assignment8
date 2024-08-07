@@ -1,7 +1,7 @@
 import os
-from tkinter import *
-from tkinter import font, messagebox
-from tkinter.ttk import *
+from tkinter import (ARC, BOTH, LEFT, TOP, Button, Canvas, DoubleVar, Entry,
+                     Frame, Label, TclError, Tk, W, font, messagebox)
+from tkinter.ttk import Style
 
 from dotenv import load_dotenv
 
@@ -234,6 +234,7 @@ class GaugeView(Tk):
                     userInput=self.value.get(), normalLow=0, normalHigh=80
                 )
                 gmail_smtp.sendemail()
+                messagebox.showinfo("Email Sent", "Email sent successfully!")
             else:
                 # Update the pointer position on the gauge
                 if self.pointer is not None:
@@ -254,7 +255,7 @@ class GaugeView(Tk):
         except TclError:
             # Show an error message if the input is invalid
             messagebox.showerror(
-                "Invalid Input", f"Please enter a valid floating-point number"
+                "Invalid Input", "Please enter a valid floating-point number"
             )
 
     def update_mouse_coordinates(self, event):
