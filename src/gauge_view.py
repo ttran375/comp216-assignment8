@@ -1,7 +1,7 @@
 import os
-from tkinter import (ARC, BOTH, LEFT, TOP, Button, Canvas, DoubleVar, Entry,
+from tkinter import (ARC, BOTH, LEFT, TOP, Canvas, DoubleVar, Entry,
                      Frame, Label, TclError, Tk, W, font, messagebox)
-from tkinter.ttk import Style
+from tkinter.ttk import Button, Style
 
 from dotenv import load_dotenv
 
@@ -234,7 +234,10 @@ class GaugeView(Tk):
                     userInput=self.value.get(), normalLow=0, normalHigh=80
                 )
                 gmail_smtp.sendemail()
-                messagebox.showinfo("Email Sent", "Email sent successfully!")
+                messagebox.showinfo(
+                    "Email Sent",
+                    f"The input value {self.value.get()} is outside the normal display range from 0 to 80. Email sent successfully!"
+                )
             else:
                 # Update the pointer position on the gauge
                 if self.pointer is not None:
