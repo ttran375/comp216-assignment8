@@ -18,7 +18,6 @@ from tkinter import (
 from tkinter.ttk import Button, Style
 
 from dotenv import load_dotenv
-
 from gmail_smtp import GmailSMTP
 
 # Load environment variables from a .env file
@@ -250,7 +249,7 @@ class GaugeView(Tk):
                 gmail_smtp.sendemail()
                 messagebox.showinfo(
                     "Email Sent",
-                    f"The input value {self.value.get()} is outside the normal display range from 0 to 80. Email sent successfully!",
+                    "Please check the email!",
                 )
             else:
                 # Update the pointer position on the gauge

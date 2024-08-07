@@ -2,9 +2,8 @@ import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from dotenv import load_dotenv
-
 from amazon_ses import AmazonSES
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
