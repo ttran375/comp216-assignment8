@@ -1,0 +1,23 @@
+{
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.gitdoc",
+                "ms-toolsai.jupyter",
+                "TianyiShi.rmarkdown",
+                "ms-python.pylint",
+                "ms-python.python",
+                "ms-python.flake8",
+                "ms-python.vscode-pylance",
+                "ms-python.mypy-type-checker",
+                "ms-python.black-formatter",
+                "streetsidesoftware.code-spell-checker",
+                "DavidAnson.vscode-markdownlint",
+                "EditorConfig.EditorConfig",
+                "VisualStudioExptTeam.intellicode-api-usage-examples",
+                "VisualStudioExptTeam.vscodeintellicode",
+                "GitHub.copilot"
+            ]
+        }
+    }
+}

@@ -1,11 +1,24 @@
 import os
-from tkinter import *
-from tkinter import font, messagebox
-from tkinter.ttk import *
+from tkinter import (
+    ARC,
+    BOTH,
+    LEFT,
+    TOP,
+    Canvas,
+    DoubleVar,
+    Entry,
+    Frame,
+    Label,
+    TclError,
+    Tk,
+    W,
+    font,
+    messagebox,
+)
+from tkinter.ttk import Button, Style
 
 from dotenv import load_dotenv
-
-from gmail_smtp import GmailSMTP
+from gmail_service import GmailService
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -17,6 +30,9 @@ class GaugeView(Tk):
         # Set the window title
         Tk.__init__(self)
         self.title("Gauge")
+
+        # Initialize pointer to None
+        self.pointer = None
 
         # Create a canvas for drawing
         Canvas(self, width=500, height=500).pack(padx=20, pady=20)
@@ -58,7 +74,7 @@ class GaugeView(Tk):
         Label(row1, text="Enter New Value:", width=12).pack(side=LEFT)
         Entry(row1, text="Enter New Value:", textvariable=self.value).pack(side=LEFT)
         Button(
-            row1, text="Enter", command=self.updateView, style="CustomButton.TButton"
+            row1, text="Enter", command=self.update_view, style="CustomButton.TButton"
         ).pack(side=LEFT, padx=5)
 
         # Create the canvas for the gauge
@@ -219,21 +235,25 @@ class GaugeView(Tk):
         # Pack the canvas
         self.canvas.pack(fill=BOTH, expand=1)
 
-    def updateView(self):
+    def update_view(self):
         try:
             # Check if the input value is out of bounds
             if self.value.get() < 0 or self.value.get() > 80:
                 # Send an email if the value is out of bounds
-                gmail_smtp = GmailSMTP(
+                gmail_smtp = GmailService(
                     os.getenv("GMAIL_USER"),
                     os.getenv("GMAIL_PASSWORD"),
                     os.getenv("RECIPIENT_EMAIL"),
                 )
-                gmail_smtp.setSubject("Warning: Out of bound input value")
-                gmail_smtp.setBody(
-                    userInput=self.value.get(), normalLow=0, normalHigh=80
+                gmail_smtp.set_subject("Warning: Out of bound input value")
+                gmail_smtp.set_body(
+                    user_input=self.value.get(), normal_low=0, normal_high=80
                 )
-                gmail_smtp.sendemail()
+                gmail_smtp.send_email()
+                messagebox.showinfo(
+                    "Email Sent",
+                    "Please check the email!",
+                )
             else:
                 # Update the pointer position on the gauge
                 if self.pointer is not None:
@@ -254,7 +274,7 @@ class GaugeView(Tk):
         except TclError:
             # Show an error message if the input is invalid
             messagebox.showerror(
-                "Invalid Input", f"Please enter a valid floating-point number"
+                "Invalid Input", "Please enter a valid floating-point number"
             )
 
     def update_mouse_coordinates(self, event):
