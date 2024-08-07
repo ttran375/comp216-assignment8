@@ -7,5 +7,8 @@
     "flake8.args": [
         "--max-line-length=150"
     ],
+    "mypy-type-checker.args": [
+        "var-annotated"
+    ],
     "files.insertFinalNewline": true
 }
