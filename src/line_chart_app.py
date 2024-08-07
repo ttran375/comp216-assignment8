@@ -2,9 +2,8 @@ import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from dotenv import load_dotenv
-
 from amazon_service import AmazonService
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
@@ -17,7 +16,7 @@ class LineChartApp(tk.Tk):
     _max_temp = 27
     _SENDER = os.getenv("AWS_EMAIL")
     _RECIPIENT = os.getenv("RECIPIENT_EMAIL")
-    _myAmazonService = None
+    _my_amazon_service = None
 
     def __init__(self):
         super().__init__()
@@ -86,8 +85,8 @@ class LineChartApp(tk.Tk):
         self.draw_temp_pointer(10)
 
         # Initialize the AmazonService object for sending emails
-        self._myAmazonService = AmazonService(self._SENDER, self._RECIPIENT)
-        self._myAmazonService.set_subject("Warning: Out of bound input value")
+        self._my_amazon_service = AmazonService(self._SENDER, self._RECIPIENT)
+        self._my_amazon_service.set_subject("Warning: Out of bound input value")
 
     def draw_chart(self):
         """
@@ -124,10 +123,10 @@ class LineChartApp(tk.Tk):
 
             # Check if the new value is out of bounds and send an email if necessary
             if new_value < self._min_temp or new_value > self._max_temp:
-                self._myAmazonService.set_body(
+                self._my_amazon_service.set_body(
                     new_value, self._min_temp, self._max_temp
                 )
-                self._myAmazonService.send_email()
+                self._my_amazon_service.send_email()
                 messagebox.showinfo(
                     "Email Sent",
                     "Please check the email!",
