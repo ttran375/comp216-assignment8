@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
+
 from dotenv import load_dotenv
 
 from amazon_ses import AmazonSES
@@ -125,6 +126,10 @@ class LineChartApp(tk.Tk):
             if new_value < self._min_temp or new_value > self._max_temp:
                 self._myAmazonSES.set_body(new_value, self._min_temp, self._max_temp)
                 self._myAmazonSES.send_email()
+                messagebox.showinfo(
+                    "Email Sent",
+                    "Please check the email!",
+                )
 
             # Add the new value to the list
             self.values.append(new_value)
